@@ -7,12 +7,15 @@ Os LLMs são modelos de Inteligência Artificial especializados no processamento
 1. [O que significa "Large Language Model"](#1-o-que-significa-large-language-model)
    - [1.1 Escala gigantesca (Large)](#11-escala-gigantesca-large)
    - [1.2 Previsão estatística avançada (Language)](#12-previsão-estatística-avançada-language)
-2. [Funcionamento interno](#2-funcionamento-interno)
-   - [2.1 Tokenização e embeddings](#21-tokenização-e-embeddings-a-linguagem-dos-números)
-   - [2.2 Mecanismo de atenção (self-attention)](#22-mecanismo-de-atenção-self-attention)
-   - [2.3 Fases de treinamento](#23-fases-de-treinamento)
-3. [Aplicações](#3-aplicações)
-4. [Glossário rápido](#4-glossário-rápido)
+2. [Conceitos de base](#2-conceitos-de-base)
+   - [2.1 Deep Learning (Aprendizado Profundo)](#21-deep-learning-aprendizado-profundo)
+   - [2.2 Arquiteturas de redes neurais massivas](#22-arquiteturas-de-redes-neurais-massivas)
+3. [Funcionamento interno](#3-funcionamento-interno)
+   - [3.1 Tokenização e embeddings](#31-tokenização-e-embeddings-a-linguagem-dos-números)
+   - [3.2 Mecanismo de atenção (self-attention)](#32-mecanismo-de-atenção-self-attention)
+   - [3.3 Fases de treinamento](#33-fases-de-treinamento)
+4. [Aplicações](#4-aplicações)
+5. [Glossário rápido](#5-glossário-rápido)
 
 ## 1. O que significa "Large Language Model"
 
@@ -37,9 +40,46 @@ Em essência, um LLM é uma máquina sofisticada de **prever a próxima palavra 
 
 *Para o contexto informado, o modelo atribui uma probabilidade a cada palavra candidata e escolhe a mais provável (aqui, "sociedade", com 78,4%).*
 
-## 2. Funcionamento interno
+## 2. Conceitos de base
 
-### 2.1 Tokenização e embeddings (a linguagem dos números)
+Antes de entrar no funcionamento interno, vale entender duas ideias que sustentam os LLMs: o **Deep Learning** e as **redes neurais massivas**. A terceira, os **embeddings**, é detalhada na seção [3.1](#31-tokenização-e-embeddings-a-linguagem-dos-números).
+
+### 2.1 Deep Learning (Aprendizado Profundo)
+
+O Deep Learning é um subcampo do **Machine Learning (Aprendizado de Máquina)**, inspirado vagamente na estrutura e no funcionamento do cérebro humano.
+
+#### Como difere do Machine Learning tradicional?
+
+| Aspecto | Machine Learning clássico | Deep Learning |
+|---|---|---|
+| **Características (features)** | Um engenheiro diz manualmente quais características o modelo deve procurar | A rede neural aprende a extrair as características sozinha |
+| **Dados de entrada** | Características definidas por uma pessoa | Dados brutos (imagens, áudios, textos) |
+| **Exemplo: classificar carros** | Dizemos ao algoritmo para olhar o número de rodas, o formato da janela etc. | A rede descobre sozinha o que diferencia um carro de outro objeto |
+
+#### O que significa "Profundo" (Deep)?
+
+O nome vem do uso de redes neurais artificiais com **muitas camadas ocultas (hidden layers)** empilhadas umas sobre as outras. Cada camada processa uma parte da informação e a repassa para a seguinte. Isso permite aprender padrões de altíssima complexidade, como reconhecer rostos, traduzir idiomas ou compor músicas.
+
+### 2.2 Arquiteturas de redes neurais massivas
+
+Arquiteturas de redes neurais massivas são modelos compostos por **bilhões ou até trilhões de conexões artificiais (parâmetros)**, estruturadas para lidar com fluxos gigantescos de dados.
+
+#### O que são neurônios artificiais?
+
+São funções matemáticas simples que trabalham em quatro passos:
+
+1. **Recebem** entradas.
+2. **Multiplicam** cada entrada por um peso, que determina a importância daquela informação.
+3. **Somam** os resultados.
+4. **Aplicam uma função de ativação** para decidir se o sinal deve ser repassado adiante.
+
+#### A escala "massiva"
+
+Nos LLMs modernos (como o GPT-4 ou o Gemini), a arquitetura (especificamente o Transformer) possui dezenas ou centenas de camadas e bilhões de pesos ajustáveis. Essa massificação permite que a rede memorize não apenas regras gramaticais, mas também nuances culturais, lógica de programação, fatos históricos e contextos complexos.
+
+## 3. Funcionamento interno
+
+### 3.1 Tokenização e embeddings (a linguagem dos números)
 
 Computadores não entendem palavras diretamente. Por isso, o texto passa por três etapas:
 
@@ -57,7 +97,15 @@ Computadores não entendem palavras diretamente. Por isso, o texto passa por tr�
 
 *Analogia geométrica: no tabuleiro, rei e dama ocupam casas vizinhas, como "rei" e "rainha" no espaço de embeddings.*
 
-### 2.2 Mecanismo de atenção (self-attention)
+#### O que é um vetor (embedding)?
+
+Computadores não entendem palavras, sentimentos ou imagens; eles só entendem números. É aqui que entram os embeddings.
+
+- **O conceito:** um embedding é a representação de um dado (uma palavra, uma frase, um pedaço de imagem) transformado em uma **lista de números (um vetor)** em um espaço multidimensional.
+- **Geometria do significado:** o truque dos embeddings é que significados semelhantes ficam próximos no espaço vetorial. Se criarmos um espaço onde a direção X representa "tamanho" e a direção Y representa "realeza", as coordenadas de "Rei" ficam muito próximas das de "Rainha" e distantes das de "Cadeira".
+- **Busca semântica:** graças aos embeddings, sistemas de IA fazem buscas por **sentido**, e não apenas por palavras-chave exatas. Se você pergunta algo usando sinônimos, a IA converte a frase em um vetor e encontra no banco de dados os vetores com a menor distância matemática entre si.
+
+### 3.2 Mecanismo de atenção (self-attention)
 
 Esta é a grande inovação da arquitetura **Transformer**. Modelos antigos liam o texto palavra por palavra, de forma linear. O Transformer analisa **a frase inteira em paralelo** e calcula o **peso de atenção** que cada palavra deve dar às outras, capturando o contexto exato.
 
@@ -81,7 +129,7 @@ Ao ler *"O homem de areia fez parte do filme A Origem dos Guardiões"*, o mecani
 
 *Da esquerda para a direita: "A Origem dos Guardiões", série The Sandman (Netflix) e Homem-Areia (Homem-Aranha). É o contexto da frase que define qual deles está sendo citado.*
 
-### 2.3 Fases de treinamento
+### 3.3 Fases de treinamento
 
 | Fase | Nome | O que acontece |
 |---|---|---|
@@ -92,7 +140,7 @@ Ao ler *"O homem de areia fez parte do filme A Origem dos Guardiões"*, o mecani
 
 *Fase 1 (pré-treinamento não supervisionado, com compreensão geral da linguagem) e Fase 2 (fine-tuning com feedback humano, com especialização e alinhamento).*
 
-## 3. Aplicações
+## 4. Aplicações
 
 Os LLMs são **tecnologias de uso geral (*general-purpose technologies*)**, aplicadas sempre que há necessidade de entender, transformar, resumir ou gerar texto e código.
 
@@ -104,16 +152,21 @@ Os LLMs são **tecnologias de uso geral (*general-purpose technologies*)**, apli
 | **Assistentes conversacionais e automação** | Chatbots avançados de atendimento integrados a bases de conhecimento internas (sistemas **RAG**, *Retrieval-Augmented Generation*) |
 | **Agentes de IA** | Sistemas autônomos em que o LLM atua como "cérebro" central: planeja tarefas, usa ferramentas (calculadoras, APIs de clima) e resolve problemas complexos de ponta a ponta |
 
-## 4. Glossário rápido
+## 5. Glossário rápido
 
 | Termo | Significado |
 |---|---|
 | **LLM** | Modelo de IA treinado com enormes volumes de texto para processar e gerar linguagem natural |
+| **Machine Learning** | Área da IA em que modelos aprendem padrões a partir de dados |
+| **Deep Learning** | Subcampo do Machine Learning que usa redes neurais com muitas camadas ocultas e aprende as características sozinho |
+| **Camada oculta** | Camada intermediária de uma rede neural, entre a entrada e a saída |
+| **Neurônio artificial** | Função matemática que recebe entradas, multiplica por pesos, soma e aplica uma função de ativação |
 | **Transformer** | Arquitetura de rede neural, introduzida em 2017, baseada no mecanismo de atenção |
-| **Parâmetros** | Valores internos da rede neural ajustados durante o treinamento |
+| **Parâmetros** | Valores internos da rede neural (como os pesos) ajustados durante o treinamento |
 | **Prompt** | Texto de entrada fornecido ao modelo |
 | **Token** | Fragmento de texto (palavra, sílaba ou parte de palavra) processado pelo modelo |
-| **Embedding** | Vetor que representa um token em um espaço onde significados semelhantes ficam próximos |
+| **Embedding** | Vetor que representa um dado em um espaço onde significados semelhantes ficam próximos |
+| **Busca semântica** | Busca por sentido, que compara a distância entre vetores em vez de palavras-chave exatas |
 | **Self-attention** | Cálculo do peso que cada palavra dá às outras da mesma frase |
 | **Pré-treinamento** | Fase em que o modelo aprende a linguagem prevendo a próxima palavra |
 | **RLHF** | Ajuste fino com feedback humano para tornar o modelo útil e seguro |
